@@ -14,13 +14,29 @@
   }
 
   header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #ff6600;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    font-family: 'Georgia', serif;
-    font-size: 2em;
+    padding: 10px 20px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  header img {
+    height: 60px;
+  }
+
+  header h1 {
+    color: white;
+    font-family: 'Georgia', serif;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0;
+    font-size: 1.8em;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   }
 
   main {
@@ -69,38 +85,27 @@
     margin-right: 5px;
   }
 
-  .approve {
-    background-color: #28a745;
-  }
+  .approve { background-color: #28a745; }
+  .reject { background-color: #dc3545; }
+  .download { background-color: #007bff; margin-bottom: 20px; }
 
-  .reject {
-    background-color: #dc3545;
-  }
-
-  .download {
-    background-color: #007bff;
-    margin-bottom: 20px;
-  }
-
-  .status {
-    font-weight: bold;
-  }
+  .status { font-weight: bold; }
 
   @media (max-width: 768px) {
-    table, th, td {
-      font-size: 14px;
-    }
-
-    button {
-      padding: 5px 10px;
-      font-size: 12px;
-    }
+    table, th, td { font-size: 14px; }
+    button { padding: 5px 10px; font-size: 12px; }
+    header h1 { font-size: 1.4em; }
+    header img { height: 50px; }
   }
 </style>
 </head>
 <body>
 
-<header>Hammarsdale Got Talent - Admin Dashboard</header>
+<header>
+  <img src="logo.jpg" alt="Logo Left">
+  <h1>Hammarsdale Got Talent - Admin</h1>
+  <img src="logov.jpg" alt="Logo Right">
+</header>
 
 <main>
   <h2>Submissions</h2>
@@ -127,9 +132,9 @@
 </main>
 
 <script>
-  // Sample submissions (replace with dynamic fetch from backend)
+  // Sample submissions array (replace with Netlify fetch later)
   let submissions = [
-    {name: "John Doe", email:"john@example.com", phone:"0812345678", category:"Performer", talentCategory:"Singing", talent:"Solo singing performance", status:"Pending"},
+    {name: "John Doe", email:"john@example.com", phone:"0812345678", category:"Performer", talentCategory:"Singing", talent:"Solo singing", status:"Pending"},
     {name: "Jane Smith", email:"jane@example.com", phone:"0823456789", category:"Volunteer", talentCategory:"", talent:"", status:"Pending"}
   ];
 
@@ -139,7 +144,6 @@
     tableBody.innerHTML = "";
     submissions.forEach((sub, index) => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
         <td>${sub.name}</td>
         <td>${sub.email}</td>
