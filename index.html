@@ -1,150 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hammarsdale Got Talent - Registration</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f9f9f9;
-            color: #333;
-        }
-        header {
-            background: #ff6600;
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-        }
-        main {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
-            border-radius: 8px;
-        }
-        h1, h2 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background: #ff6600;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            margin-top: 15px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #e65c00;
-        }
-        footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 14px;
-            margin-top: 20px;
-            background: #eee;
-        }
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hammarsdale Got Talent Registration</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+  form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+  input, select, textarea, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+  button { background: #ff6600; color: white; border: none; cursor: pointer; font-weight: bold; }
+  button:hover { background: #e65c00; }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Hammarsdale Got Talent</h1>
-        <p>Show your skills and shine on stage!</p>
-    </header>
 
-    <main>
-        <h2>Registration Form</h2>
-        <div id="success" class="success-message">
-            ✅ Thank you! Your registration has been received. We’ll contact you soon.
-        </div>
+<h1 style="text-align:center;">Hammarsdale Got Talent Registration</h1>
 
-        <!-- Netlify Forms Integration -->
-        <form name="talent-registration" method="POST" data-netlify="true" id="registrationForm">
-            <!-- Hidden input required by Netlify -->
-            <input type="hidden" name="form-name" value="talent-registration">
+<form name="talent-registration" method="POST" data-netlify="true">
+  <input type="hidden" name="form-name" value="talent-registration">
 
-            <label>Full Name:</label>
-            <input type="text" name="fullname" required>
+  <label for="fullname">Full Name</label>
+  <input type="text" id="fullname" name="fullname" required>
 
-            <label>Age:</label>
-            <input type="number" name="age" min="5" max="100" required>
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required>
 
-            <label>Contact Number:</label>
-            <input type="tel" name="contact" placeholder="e.g. 067 000 0000" required>
+  <label for="category">Category</label>
+  <select id="category" name="category" required>
+    <option value="">--Select--</option>
+    <option value="Performer">Performer</option>
+    <option value="Volunteer">Volunteer</option>
+    <option value="Other">Other</option>
+  </select>
 
-            <label>Talent Type:</label>
-            <select name="talent" required>
-                <option value="">-- Select --</option>
-                <option>Singing</option>
-                <option>Dancing</option>
-                <option>Comedy</option>
-                <option>Magic</option>
-                <option>Other</option>
-            </select>
+  <div id="talentDiv" style="display:none;">
+    <label for="talent">Talent Description</label>
+    <textarea id="talent" name="talent" placeholder="Describe your talent"></textarea>
+  </div>
 
-            <label>Short Description:</label>
-            <textarea name="description" rows="4" placeholder="Tell us about your act..." required></textarea>
+  <button type="submit">Submit</button>
+</form>
 
-            <label>
-                <input type="checkbox" name="consent" required>
-                I agree to the event terms & conditions.
-            </label>
+<script>
+const category = document.getElementById('category');
+const talentDiv = document.getElementById('talentDiv');
+const talentField = document.getElementById('talent');
 
-            <button type="submit">Submit Registration</button>
-        </form>
-    </main>
+category.addEventListener('change', function() {
+  if (this.value === 'Performer' || this.value === 'Other') {
+    talentDiv.style.display = 'block';
+    talentField.required = true;
+  } else {
+    talentDiv.style.display = 'none';
+    talentField.required = false;
+    talentField.value = '';
+  }
+});
+</script>
 
-    <footer>
-        &copy; 2025 Hammarsdale Got Talent | Designed by Event Team
-    </footer>
-
-    <script>
-        const form = document.getElementById('registrationForm');
-        const successMessage = document.getElementById('success');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(form);
-
-            fetch('/', {
-                method: 'POST',
-                body: formData
-            }).then(() => {
-                form.style.display = 'none';
-                successMessage.style.display = 'block';
-            }).catch((error) => {
-                alert('There was a problem submitting the form.');
-                console.error(error);
-            });
-        });
-    </script>
 </body>
 </html>
