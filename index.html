@@ -7,7 +7,9 @@
 <style>
   /* Body & Background */
   body {
-    background: url('talent.jpg') no-repeat center center fixed;
+    background:
+      linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), /* lighter dim */
+      url('background (2).jpg') no-repeat center center fixed;
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -15,22 +17,8 @@
     color: #333;
   }
 
-  /* Optional: add subtle overlay for text readability */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.2); /* subtle dim to keep text readable */
-    z-index: 0;
-  }
-
   /* Header */
   header {
-    position: relative;
-    z-index: 1;
     text-align: center;
     padding: 40px 20px 10px 20px;
   }
@@ -52,8 +40,6 @@
 
   /* Form container */
   form {
-    position: relative;
-    z-index: 1;
     max-width: 550px;
     margin: 40px auto;
     background: rgba(255,255,255,0.97);
@@ -70,7 +56,6 @@
     font-weight: bold;
     font-family: 'Verdana', sans-serif;
     color: #333;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
   }
 
   input, select, textarea {
@@ -112,7 +97,7 @@
   }
 
   /* Talent fields */
-  #talentDiv, #talentCatDiv {
+  #talentDiv, #talentCatDiv, #otherTalentDiv {
     background: #fff8f0;
     padding: 12px;
     border-radius: 8px;
@@ -122,8 +107,6 @@
 
   /* Footer */
   footer {
-    position: relative;
-    z-index: 1;
     text-align: center;
     margin-top: 60px;
     padding-bottom: 30px;
@@ -188,6 +171,12 @@
     </select>
   </div>
 
+  <!-- Other Talent (if selected) -->
+  <div id="otherTalentDiv" style="display:none;">
+    <label for="otherTalent">Please Specify Talent</label>
+    <input type="text" id="otherTalent" name="otherTalent" placeholder="Enter your talent">
+  </div>
+
   <!-- Talent Description -->
   <div id="talentDiv" style="display:none;">
     <label for="talent">Talent Description</label>
@@ -207,6 +196,8 @@ const talentDiv = document.getElementById('talentDiv');
 const talentField = document.getElementById('talent');
 const talentCatDiv = document.getElementById('talentCatDiv');
 const talentCategory = document.getElementById('talentCategory');
+const otherTalentDiv = document.getElementById('otherTalentDiv');
+const otherTalentField = document.getElementById('otherTalent');
 
 category.addEventListener('change', function() {
   if (this.value === 'Performer' || this.value === 'Other') {
@@ -221,6 +212,20 @@ category.addEventListener('change', function() {
     talentCatDiv.style.display = 'none';
     talentCategory.required = false;
     talentCategory.value = '';
+    otherTalentDiv.style.display = 'none';
+    otherTalentField.required = false;
+    otherTalentField.value = '';
+  }
+});
+
+talentCategory.addEventListener('change', function() {
+  if(this.value === 'Other') {
+    otherTalentDiv.style.display = 'block';
+    otherTalentField.required = true;
+  } else {
+    otherTalentDiv.style.display = 'none';
+    otherTalentField.required = false;
+    otherTalentField.value = '';
   }
 });
 </script>
