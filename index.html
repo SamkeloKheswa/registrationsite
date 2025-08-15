@@ -5,26 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hammarsdale Got Talent Registration</title>
 <style>
-  body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-  form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
-  input, select, textarea, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
-  button { background: #ff6600; color: white; border: none; cursor: pointer; font-weight: bold; }
+  body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+  h1 { text-align: center; color: #ff6600; }
+  form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  label { display: block; margin-top: 15px; font-weight: bold; }
+  input, select, textarea, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+  button { background: #ff6600; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
   button:hover { background: #e65c00; }
 </style>
 </head>
 <body>
 
-<h1 style="text-align:center;">Hammarsdale Got Talent Registration</h1>
+<h1>Hammarsdale Got Talent Registration</h1>
 
 <form name="talent-registration" method="POST" data-netlify="true">
   <input type="hidden" name="form-name" value="talent-registration">
 
+  <!-- Name -->
   <label for="fullname">Full Name</label>
   <input type="text" id="fullname" name="fullname" required>
 
+  <!-- Email -->
   <label for="email">Email</label>
   <input type="email" id="email" name="email" required>
 
+  <!-- Category -->
   <label for="category">Category</label>
   <select id="category" name="category" required>
     <option value="">--Select--</option>
@@ -33,6 +38,7 @@
     <option value="Other">Other</option>
   </select>
 
+  <!-- Talent Description (only for Performer or Other) -->
   <div id="talentDiv" style="display:none;">
     <label for="talent">Talent Description</label>
     <textarea id="talent" name="talent" placeholder="Describe your talent"></textarea>
