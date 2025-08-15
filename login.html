@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login - Hammarsdale Got Talent</title>
+<style>
+  body {
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 0;
+  }
+  .login-container {
+    position: relative;
+    z-index: 1;
+    max-width: 400px;
+    margin: 120px auto;
+    background: rgba(255,255,255,0.95);
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  h2 {
+    margin-bottom: 25px;
+    color: #1a73e8;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  }
+  input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+  button:hover { background-color: #155bb5; }
+  .error { color: red; margin-bottom: 15px; }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Admin Login</h2>
+  <div class="error" id="errorMsg"></div>
+  <input type="password" id="adminPassword" placeholder="Enter password">
+  <button onclick="login()">Login</button>
+</div>
+
+<script>
+  const PASSWORD = "Hammarsdale2025"; 
+  function login() {
+    const entered = document.getElementById('adminPassword').value;
+    const errorMsg = document.getElementById('errorMsg');
+    if (entered === PASSWORD) window.location.href = "admin.html";
+    else errorMsg.textContent = "Incorrect password. Try again.";
+  }
+  document.getElementById('adminPassword').addEventListener("keypress", function(e){
+    if(e.key === "Enter") login();
+  });
+</script>
+
+</body>
+</html>
