@@ -38,6 +38,18 @@
     <option value="Other">Other</option>
   </select>
 
+  <!-- Talent Category (only for Performer or Other) -->
+  <div id="talentCatDiv" style="display:none;">
+    <label for="talentCategory">Talent Category</label>
+    <select id="talentCategory" name="talentCategory">
+      <option value="">--Select Talent--</option>
+      <option value="Singing">Singing</option>
+      <option value="Dancing">Dancing</option>
+      <option value="Acting">Acting</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
   <!-- Talent Description (only for Performer or Other) -->
   <div id="talentDiv" style="display:none;">
     <label for="talent">Talent Description</label>
@@ -51,15 +63,22 @@
 const category = document.getElementById('category');
 const talentDiv = document.getElementById('talentDiv');
 const talentField = document.getElementById('talent');
+const talentCatDiv = document.getElementById('talentCatDiv');
+const talentCategory = document.getElementById('talentCategory');
 
 category.addEventListener('change', function() {
   if (this.value === 'Performer' || this.value === 'Other') {
     talentDiv.style.display = 'block';
     talentField.required = true;
+    talentCatDiv.style.display = 'block';
+    talentCategory.required = true;
   } else {
     talentDiv.style.display = 'none';
     talentField.required = false;
     talentField.value = '';
+    talentCatDiv.style.display = 'none';
+    talentCategory.required = false;
+    talentCategory.value = '';
   }
 });
 </script>
