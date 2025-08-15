@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Hammarsdale Got Talent</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; }
+    .login-box, .dashboard { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; }
+    input, button { width: 100%; padding: 10px; margin: 10px 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 8px; text-align: left; }
+</style>
+</head>
+<body>
+
+<div class="login-box" id="loginBox">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+</div>
+
+<div class="dashboard" id="dashboard" style="display:none;">
+    <h2>Registrations</h2>
+    <table id="entriesTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Contact</th>
+                <th>Talent</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "password123"; // Change this
+
+    function login() {
+        let user = document.getElementById('username').value;
+        let pass = document.getElementById('password').value;
+        if(user === ADMIN_USER && pass === ADMIN_PASS) {
+            document.getElementById('loginBox').style.display = "none";
+            document.getElementById('dashboard').style.display = "block";
+            fetchEntries();
+        } else {
+            alert("Invalid credentials!");
+        }
+    }
+
+    async function fetchEntries() {
+        try {
+            let res = await fetch("/.netlify/functions/get-submissions");
+            let entries = await res.json();
+            let tbody = document.querySelector("#entriesTable tbody");
+            tbody.innerHTML = "";
+            entries.forEach(e => {
+                let row = `<tr>
+                    <td>${e.data.fullname}</td>
+                    <td>${e.data.age}</td>
+                    <td>${e.data.contact}</td>
+                    <td>${e.data.talent}</td>
+                    <td>${e.data.description}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        } catch (err) {
+            console.error(err);
+            alert("Error fetching entries.");
+        }
+    }
+</script>
+
+</body>
+</html>
