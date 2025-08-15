@@ -8,8 +8,8 @@
   /* Body & Background */
   body {
     background:
-      linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), /* lighter dim */
-      url('new.jpeg') no-repeat center center fixed;
+      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+      url('background (2).jpg') no-repeat center center fixed;
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -19,8 +19,23 @@
 
   /* Header */
   header {
+    position: relative;
     text-align: center;
     padding: 40px 20px 10px 20px;
+  }
+
+  .logo-left {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 80px;
+  }
+
+  .logo-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 80px;
   }
 
   header h1 {
@@ -49,7 +64,6 @@
     border-top: 6px solid #ff6600;
   }
 
-  /* Labels & Inputs */
   label {
     display: block;
     margin-top: 20px;
@@ -76,7 +90,6 @@
     outline: none;
   }
 
-  /* Submit Button */
   button {
     background: #ff6600;
     color: white;
@@ -96,8 +109,7 @@
     box-shadow: 0 6px 15px rgba(230,92,0,0.4);
   }
 
-  /* Talent fields */
-  #talentDiv, #talentCatDiv, #otherTalentDiv {
+  #talentDiv, #talentCatDiv {
     background: #fff8f0;
     padding: 12px;
     border-radius: 8px;
@@ -105,7 +117,6 @@
     border: 1px solid #ffcc99;
   }
 
-  /* Footer */
   footer {
     text-align: center;
     margin-top: 60px;
@@ -120,7 +131,6 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   }
 
-  /* Responsive */
   @media (max-width: 600px) {
     form {
       margin: 30px 20px;
@@ -129,12 +139,17 @@
     header h1 {
       font-size: 2.2em;
     }
+    .logo-left, .logo-right {
+      height: 60px;
+    }
   }
 </style>
 </head>
 <body>
 
 <header>
+  <img src="logo.jpeg" alt="Left Logo" class="logo-left">
+  <img src="logov.jpeg" alt="Right Logo" class="logo-right">
   <h1>Hammarsdale Got Talent</h1>
   <p>Register now to showcase your talent or volunteer for the event!</p>
 </header>
@@ -159,7 +174,6 @@
     <option value="Other">Other</option>
   </select>
 
-  <!-- Talent Category -->
   <div id="talentCatDiv" style="display:none;">
     <label for="talentCategory">Talent Category</label>
     <select id="talentCategory" name="talentCategory">
@@ -171,13 +185,6 @@
     </select>
   </div>
 
-  <!-- Other Talent (if selected) -->
-  <div id="otherTalentDiv" style="display:none;">
-    <label for="otherTalent">Please Specify Talent</label>
-    <input type="text" id="otherTalent" name="otherTalent" placeholder="Enter your talent">
-  </div>
-
-  <!-- Talent Description -->
   <div id="talentDiv" style="display:none;">
     <label for="talent">Talent Description</label>
     <textarea id="talent" name="talent" placeholder="Describe your talent"></textarea>
@@ -196,8 +203,6 @@ const talentDiv = document.getElementById('talentDiv');
 const talentField = document.getElementById('talent');
 const talentCatDiv = document.getElementById('talentCatDiv');
 const talentCategory = document.getElementById('talentCategory');
-const otherTalentDiv = document.getElementById('otherTalentDiv');
-const otherTalentField = document.getElementById('otherTalent');
 
 category.addEventListener('change', function() {
   if (this.value === 'Performer' || this.value === 'Other') {
@@ -212,20 +217,6 @@ category.addEventListener('change', function() {
     talentCatDiv.style.display = 'none';
     talentCategory.required = false;
     talentCategory.value = '';
-    otherTalentDiv.style.display = 'none';
-    otherTalentField.required = false;
-    otherTalentField.value = '';
-  }
-});
-
-talentCategory.addEventListener('change', function() {
-  if(this.value === 'Other') {
-    otherTalentDiv.style.display = 'block';
-    otherTalentField.required = true;
-  } else {
-    otherTalentDiv.style.display = 'none';
-    otherTalentField.required = false;
-    otherTalentField.value = '';
   }
 });
 </script>
