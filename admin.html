@@ -3,216 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hammarsdale Got Talent - Admin Dashboard</title>
+<title>Hammarsdale Got Talent - Admin</title>
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f4f4f9;
+    background: #f4f4f4;
     color: #333;
   }
 
-  /* Header */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(90deg, #1a73e8, #155bb5);
-    padding: 10px 20px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  /* Login Container */
+  #loginContainer, #dashboardContainer {
+    max-width: 700px;
+    margin: 80px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
   }
 
-  header img {
-    height: 100px; /* increased logo size */
-    max-height: 100px;
-    object-fit: contain; /* ensures full logo visible */
-  }
-
-  header h1 {
-    color: white;
-    font-family: 'Georgia', serif;
+  h2 {
     text-align: center;
-    flex-grow: 1;
-    margin: 0;
-    font-size: 1.8em;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    color: #ff6600;
   }
 
-  /* Main content */
-  main {
-    padding: 30px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
   }
 
-  h2 { color: #1a73e8; margin-bottom: 20px; }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
 
+  button {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1em;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  button:hover {
+    background: #e65c00;
+  }
+
+  /* Dashboard Table */
   table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 20px;
   }
 
   th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #ccc;
+    padding: 12px;
     text-align: left;
   }
 
-  th { background-color: #1a73e8; color: white; font-weight: bold; }
+  th {
+    background: #ff6600;
+    color: white;
+  }
 
-  tr:hover { background-color: #f1f1f1; }
-
-  button {
-    padding: 6px 12px;
+  .action-btn {
+    padding: 6px 10px;
+    margin-right: 5px;
     border: none;
     border-radius: 5px;
-    color: white;
     cursor: pointer;
-    font-weight: bold;
-    margin-right: 5px;
+    color: white;
   }
 
-  .approve { background-color: #28a745; }
-  .reject { background-color: #dc3545; }
-  .download { background-color: #155bb5; margin-bottom: 20px; }
+  .approve { background: #28a745; }
+  .reject { background: #dc3545; }
 
-  .status { font-weight: bold; }
-
-  footer {
-    text-align: center;
-    margin-top: 40px;
-    padding-bottom: 20px;
+  .download-btn {
+    margin-top: 20px;
+    background: #007bff;
   }
 
-  footer img {
-    width: 220px;
-    opacity: 0.95;
-    border-radius: 10px;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    table, th, td { font-size: 14px; }
-    button { padding: 5px 10px; font-size: 12px; }
-    header h1 { font-size: 1.4em; }
-    header img { height: 70px; } /* scale down on mobile */
-  }
+  .hidden { display: none; }
 </style>
 </head>
 <body>
 
-<header>
-  <img src="logo.jpeg" alt="Logo Left">
-  <h1>Hammarsdale Got Talent - Admin</h1>
-  <img src="logov.jpeg" alt="Logo Right">
-</header>
+<div id="loginContainer">
+  <h2>Admin Login</h2>
+  <label for="username">Username</label>
+  <input type="text" id="username" placeholder="Enter username" required>
 
-<main>
-  <h2>Submissions</h2>
-  <button class="download" onclick="downloadCSV()">Download Excel/CSV</button>
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="Enter password" required>
 
-  <table id="submissionsTable">
+  <button onclick="login()">Login</button>
+  <p id="loginError" style="color:red; text-align:center; margin-top:10px;"></p>
+</div>
+
+<div id="dashboardContainer" class="hidden">
+  <h2>Admin Dashboard</h2>
+  <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
+  <table id="submissionTable">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Full Name</th>
         <th>Email</th>
         <th>Phone</th>
         <th>Category</th>
         <th>Talent Category</th>
+        <th>Other Talent</th>
         <th>Talent Description</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+      <!-- Entries will appear here -->
+    </tbody>
   </table>
-</main>
-
-<footer>
-  <img src="talent2.jpg" alt="Talent Show Footer">
-</footer>
+</div>
 
 <script>
-  let submissions = [];
+const adminUsername = "admin"; // Change this
+const adminPassword = "password123"; // Change this
 
-  // Fetch live Netlify submissions
-  async function fetchSubmissions() {
-    try {
-      const res = await fetch('/.netlify/functions/get-submissions');
-      const data = await res.json();
-      submissions = data;
-      renderTable();
-    } catch (err) {
-      console.error("Error fetching submissions:", err);
-    }
+const loginContainer = document.getElementById('loginContainer');
+const dashboardContainer = document.getElementById('dashboardContainer');
+const loginError = document.getElementById('loginError');
+const submissionTableBody = document.querySelector("#submissionTable tbody");
+
+// Sample data (replace with your Netlify form submissions fetching if needed)
+let submissions = [
+  {fullname:"John Doe", email:"john@example.com", phone:"0812345678", category:"Performer", talentCategory:"Singing", otherTalent:"", talent:"Sang a song", status:"Pending"},
+  {fullname:"Jane Smith", email:"jane@example.com", phone:"0823456789", category:"Volunteer", talentCategory:"", otherTalent:"", talent:"Helping out", status:"Pending"}
+];
+
+// Login function
+function login(){
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  if(username === adminUsername && password === adminPassword){
+    loginContainer.classList.add('hidden');
+    dashboardContainer.classList.remove('hidden');
+    loadTable();
+  } else {
+    loginError.textContent = "Invalid username or password!";
   }
+}
 
-  const tableBody = document.querySelector("#submissionsTable tbody");
+// Load table
+function loadTable(){
+  submissionTableBody.innerHTML = "";
+  submissions.forEach((sub, index)=>{
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${sub.fullname}</td>
+      <td>${sub.email}</td>
+      <td>${sub.phone}</td>
+      <td>${sub.category}</td>
+      <td>${sub.talentCategory}</td>
+      <td>${sub.otherTalent}</td>
+      <td>${sub.talent}</td>
+      <td>${sub.status}</td>
+      <td>
+        <button class="action-btn approve" onclick="updateStatus(${index}, 'Approved')">Approve</button>
+        <button class="action-btn reject" onclick="updateStatus(${index}, 'Rejected')">Reject</button>
+      </td>
+    `;
+    submissionTableBody.appendChild(row);
+  });
+}
 
-  function renderTable() {
-    tableBody.innerHTML = "";
-    submissions.forEach((sub, index) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${sub.name}</td>
-        <td>${sub.email}</td>
-        <td>${sub.phone}</td>
-        <td>${sub.category}</td>
-        <td>${sub.talentCategory || "-"}</td>
-        <td>${sub.talent || "-"}</td>
-        <td class="status">${sub.status}</td>
-        <td>
-          <button class="approve" onclick="updateStatus(${index}, 'Approved')">Approve</button>
-          <button class="reject" onclick="updateStatus(${index}, 'Rejected')">Reject</button>
-        </td>
-      `;
-      tableBody.appendChild(row);
-    });
-  }
+// Update status
+function updateStatus(index, status){
+  submissions[index].status = status;
+  loadTable();
+}
 
-  function updateStatus(index, status) {
-    submissions[index].status = status;
-    renderTable();
-  }
-
-  function downloadCSV() {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    // Column headers
-    csvContent += "Name,Email,Phone,Category,Talent Category,Talent Description,Status\n";
-
-    // Rows
-    submissions.forEach(sub => {
-      let row = [
-        sub.name,
-        sub.email,
-        sub.phone,
-        sub.category,
-        sub.talentCategory || "",
-        sub.talent || "",
-        sub.status
-      ].join(",");
-      csvContent += row + "\n";
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "submissions.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  // Load submissions when page loads
-  fetchSubmissions();
+// Download CSV
+function downloadCSV(){
+  let csv = "Full Name,Email,Phone,Category,Talent Category,Other Talent,Talent Description,Status\n";
+  submissions.forEach(sub=>{
+    csv += `${sub.fullname},${sub.email},${sub.phone},${sub.category},${sub.talentCategory},${sub.otherTalent},${sub.talent},${sub.status}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'submissions.csv';
+  link.click();
+}
 </script>
 
 </body>
