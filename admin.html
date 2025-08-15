@@ -3,89 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Hammarsdale Got Talent</title>
+<title>Hammarsdale Got Talent Admin Dashboard</title>
 <style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
-  h1 { text-align: center; color: #ff6600; font-family: 'Georgia', serif; margin-bottom: 20px; }
-  #search { width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc; font-family: 'Trebuchet MS', sans-serif; }
-  table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-  th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; font-family: 'Verdana', sans-serif; }
-  th { background-color: #ff6600; color: white; }
-  tr:hover { background-color: #f1f1f1; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f9;
+    color: #333;
+  }
+
+  header {
+    background-color: #ff6600;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-family: 'Georgia', serif;
+    font-size: 2em;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  }
+
+  main {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    color: #ff6600;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #ff6600;
+    color: white;
+    font-weight: bold;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .approve {
+    background-color: #28a745;
+  }
+
+  .reject {
+    background-color: #dc3545;
+  }
+
+  .download {
+    background-color: #007bff;
+    margin-bottom: 20px;
+  }
+
+  .status {
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    table, th, td {
+      font-size: 14px;
+    }
+
+    button {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+  }
 </style>
 </head>
 <body>
 
-<h1>Admin Dashboard - Hammarsdale Got Talent</h1>
+<header>Hammarsdale Got Talent - Admin Dashboard</header>
 
-<input type="text" id="search" placeholder="Search by Name or Category...">
+<main>
+  <h2>Submissions</h2>
 
-<table id="submissionsTable">
-  <thead>
-    <tr>
-      <th>Full Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Category</th>
-      <th>Talent Category</th>
-      <th>Talent Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Submissions will be populated here -->
-  </tbody>
-</table>
+  <button class="download" onclick="downloadCSV()">Download Excel/CSV</button>
+
+  <table id="submissionsTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Category</th>
+        <th>Talent Category</th>
+        <th>Talent Description</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Submissions will be loaded here dynamically -->
+    </tbody>
+  </table>
+</main>
 
 <script>
-// Fetch submissions from Netlify function
-async function fetchSubmissions() {
-  try {
-    const res = await fetch("/.netlify/functions/get-submissions");
-    const data = await res.json();
+  // Sample submissions (replace with dynamic fetch from backend)
+  let submissions = [
+    {name: "John Doe", email:"john@example.com", phone:"0812345678", category:"Performer", talentCategory:"Singing", talent:"Solo singing performance", status:"Pending"},
+    {name: "Jane Smith", email:"jane@example.com", phone:"0823456789", category:"Volunteer", talentCategory:"", talent:"", status:"Pending"}
+  ];
 
-    const tbody = document.querySelector("#submissionsTable tbody");
-    tbody.innerHTML = "";
+  const tableBody = document.querySelector("#submissionsTable tbody");
 
-    if(data.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No submissions yet</td></tr>";
-      return;
-    }
-
-    data.forEach(entry => {
+  function renderTable() {
+    tableBody.innerHTML = "";
+    submissions.forEach((sub, index) => {
       const row = document.createElement("tr");
+
       row.innerHTML = `
-        <td>${entry.data.fullname || ""}</td>
-        <td>${entry.data.email || ""}</td>
-        <td>${entry.data.phone || ""}</td>
-        <td>${entry.data.category || ""}</td>
-        <td>${entry.data.talentCategory || ""}</td>
-        <td>${entry.data.talent || ""}</td>
+        <td>${sub.name}</td>
+        <td>${sub.email}</td>
+        <td>${sub.phone}</td>
+        <td>${sub.category}</td>
+        <td>${sub.talentCategory || "-"}</td>
+        <td>${sub.talent || "-"}</td>
+        <td class="status">${sub.status}</td>
+        <td>
+          <button class="approve" onclick="updateStatus(${index}, 'Approved')">Approve</button>
+          <button class="reject" onclick="updateStatus(${index}, 'Rejected')">Reject</button>
+        </td>
       `;
-      tbody.appendChild(row);
+      tableBody.appendChild(row);
     });
-  } catch(err) {
-    console.error("Error fetching submissions:", err);
-    document.querySelector("#submissionsTable tbody").innerHTML = "<tr><td colspan='6' style='text-align:center;'>Error loading submissions</td></tr>";
   }
-}
 
-// Simple search/filter function
-document.getElementById("search").addEventListener("input", function() {
-  const filter = this.value.toLowerCase();
-  const rows = document.querySelectorAll("#submissionsTable tbody tr");
-  rows.forEach(row => {
-    const name = row.cells[0].textContent.toLowerCase();
-    const category = row.cells[3].textContent.toLowerCase();
-    if(name.includes(filter) || category.includes(filter)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
-  });
-});
+  function updateStatus(index, status) {
+    submissions[index].status = status;
+    renderTable();
+  }
 
-// Initial fetch
-fetchSubmissions();
+  function downloadCSV() {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Name,Email,Phone,Category,Talent Category,Talent Description,Status\n";
+    submissions.forEach(sub => {
+      let row = [sub.name, sub.email, sub.phone, sub.category, sub.talentCategory || "", sub.talent || "", sub.status].join(",");
+      csvContent += row + "\n";
+    });
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "submissions.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  renderTable();
 </script>
 
 </body>
