@@ -19,23 +19,8 @@
 
   /* Header */
   header {
-    position: relative;
     text-align: center;
     padding: 40px 20px 10px 20px;
-  }
-
-  .logo-left {
-    position: absolute;
-    top: 25px;
-    left: 10px;
-    height: 100px;
-  }
-
-  .logo-right {
-    position: absolute;
-    top: 25px;
-    right: 10px;
-    height: 100px;
   }
 
   header h1 {
@@ -117,18 +102,50 @@
     border: 1px solid #ffcc99;
   }
 
-  footer {
+  /* Events Panel */
+  .events {
+    background: rgba(0,0,0,0.7);
+    color: white;
+    margin: 40px auto;
+    padding: 25px;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     text-align: center;
+  }
+  .events h2 {
+    color: #ffcc66;
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+  .events p {
+    color: #ddd;
+    font-size: 1.1em;
+  }
+
+  /* Footer */
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 60px;
-    padding-bottom: 30px;
+    padding: 20px;
+    background: rgba(0,0,0,0.8);
   }
 
   footer img {
-    width: 220px;
-    max-width: 80%;
+    height: 80px;
     opacity: 0.95;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  footer .center-img {
+    flex-grow: 1;
+    text-align: center;
+  }
+  footer .center-img img {
+    width: 200px;
   }
 
   @media (max-width: 600px) {
@@ -139,8 +156,9 @@
     header h1 {
       font-size: 2.2em;
     }
-    .logo-left, .logo-right {
-      height: 60px;
+    footer {
+      flex-direction: column;
+      gap: 15px;
     }
   }
 </style>
@@ -148,8 +166,6 @@
 <body>
 
 <header>
-  <img src="logo.jpeg" alt="Left Logo" class="logo-left">
-  <img src="logov.jpeg" alt="Right Logo" class="logo-right">
   <h1>Hammarsdale Got Talent</h1>
   <p>Register now to showcase your talent or volunteer for the event!</p>
 </header>
@@ -193,8 +209,19 @@
   <button type="submit">Submit Registration</button>
 </form>
 
+<!-- Events Panel -->
+<section class="events">
+  <h2>Upcoming Events</h2>
+  <p>📅 Event details will be announced soon. Stay tuned!</p>
+</section>
+
+<!-- Footer with Logos -->
 <footer>
-  <img src="talent2.jpg" alt="Hammarsdale Talent Show">
+  <img src="logo.jpeg" alt="Left Logo">
+  <div class="center-img">
+    <img src="talent2.jpg" alt="Hammarsdale Talent Show">
+  </div>
+  <img src="logov.jpeg" alt="Right Logo">
 </footer>
 
 <script>
