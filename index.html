@@ -3,98 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talent Show</title>
+  <title>Hammarsdale Got Talent Show</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: rgba(0, 0, 0, 0.7) url('background.jpg') center/cover no-repeat;
-      background-blend-mode: darken;
+      background: rgba(0,0,0,0.7) url("background (2).jpg") no-repeat center center fixed;
+      background-size: cover;
       color: white;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      text-align: center;
     }
 
     header {
-      text-align: center;
       padding: 20px;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .events-panel {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
-      width: 100%;
-      max-width: 500px;
-    }
-
-    footer {
+    .logos {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 20px;
-      background: rgba(0, 0, 0, 0.8);
+      margin: 20px;
     }
 
-    footer img {
-      height: 40px;
+    .logos img {
+      height: 80px;
       width: auto;
     }
 
-    /* ✅ Mobile responsive tweaks */
-    @media (max-width: 600px) {
-      main {
-        padding: 15px;
-      }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 10px;
+      color: #ffcc66;
+    }
 
-      .events-panel {
-        width: 100%;
-        padding: 15px;
-      }
+    form {
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 500px;
+    }
 
-      footer {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-      }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
 
-      footer img {
-        height: 35px;
+    button {
+      background: #ffcc66;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e6b800;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.8);
+      padding: 15px;
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer img {
+      height: 60px;
+      width: auto;
+    }
+
+    /* Events Panel with glow */
+    .events {
+      background: rgba(0,0,0,0.7);
+      padding: 20px;
+      margin: 30px auto;
+      max-width: 600px;
+      border-radius: 12px;
+      position: relative;
+      animation: glow 3s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px #ffcc66, 0 0 20px #ffcc66;
+      }
+      to {
+        box-shadow: 0 0 25px #ffcc66, 0 0 50px #ff9933;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Welcome to the Talent Show</h1>
+    <h1>🌟 Hammarsdale Got Talent Show 🌟</h1>
   </header>
 
-  <main>
-    <p>Show your skills and creativity!</p>
+  <form>
+    <h2>Register Now</h2>
+    <input type="text" placeholder="Full Name" required>
+    <input type="email" placeholder="Email Address" required>
+    <textarea placeholder="Your Talent (e.g., Singing, Dancing)" required></textarea>
+    <button type="submit">Submit Entry</button>
+  </form>
 
-    <!-- Placeholder Events Panel -->
-    <div class="events-panel">
-      <h2>Upcoming Events</h2>
-      <p>[Events panel placeholder]</p>
-    </div>
-  </main>
+  <!-- Events Panel -->
+  <section class="events">
+    <h2>🌟 Upcoming Events 🌟</h2>
+    <p><strong>Hammarsdale Got Talent Show</strong></p>
+    <p>📅 <b>Date:</b> 27 & 28 September 2025</p>
+    <p>⏰ <b>Time:</b> To Be Confirmed</p>
+    <p>📍 <b>Venue:</b> To Be Confirmed</p>
+    <p style="margin-top:15px; font-size:1.2em; color:#ffcc66;">
+      🎤 Get ready for an unforgettable weekend of talent, energy, and inspiration!  
+      Come showcase your skills or cheer for your community stars. 🌍✨
+    </p>
+  </section>
 
   <footer>
-    <img src="logo-left.png" alt="Left Logo">
-    <p>&copy; 2025 Talent Show</p>
-    <img src="logo-right.png" alt="Right Logo">
+    <img src="logo.jpeg" alt="Left Logo">
+    <img src="talent2.jpg" alt="Footer Center">
+    <img src="logov.jpeg" alt="Right Logo">
   </footer>
 </body>
 </html>
