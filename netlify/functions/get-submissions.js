@@ -1,35 +1,35 @@
-exports.handler = async function(event, context) {
+// functions/get-talent-submissions.js
+import fetch from "node-fetch";
 
-  const SITE_ID = "9c904389-224f-4546-b948-594ecd41499d"; // Your Site ID
-  const FORM_NAME = "talent-registration";
-  const TOKEN = process.env.NETLIFY_API_TOKEN; // Environment variable
+export async function handler() {
+  const formId = "talent-show"; // updated form ID
+  const token = "nfp_uM5awoizEeFMXoR3kd1ReTrdS3Zgt5XZ7527"; // Personal token
 
   try {
-    // Get all forms for the site
-    const res = await fetch(`https://api.netlify.com/api/v1/sites/${SITE_ID}/forms`, {
-      headers: { Authorization: `Bearer ${TOKEN}` }
+    const res = await fetch(`https://api.netlify.com/api/v1/forms/${formId}/submissions`, {
+      headers: { "Authorization": `Bearer ${token}` }
     });
-    const forms = await res.json();
 
-    // Find the specific form
-    const form = forms.find(f => f.name === FORM_NAME);
-
-    if (!form) {
-      return { statusCode: 404, body: JSON.stringify({ error: "Form not found" }) };
+    if (!res.ok) {
+      return { statusCode: res.status, body: JSON.stringify({ error: "Failed to fetch submissions" }) };
     }
 
-    // Get submissions for the form
-    const submissionsRes = await fetch(`https://api.netlify.com/api/v1/forms/${form.id}/submissions`, {
-      headers: { Authorization: `Bearer ${TOKEN}` }
-    });
-    const submissions = await submissionsRes.json();
+    const data = await res.json();
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(submissions)
-    };
+    const submissions = data.map(sub => ({
+      fullname: sub.data.fullname || "",
+      email: sub.data.email || "",
+      phone: sub.data.phone || "",
+      category: sub.data.category || "",
+      talentCategory: sub.data.talentCategory || "",
+      otherTalent: sub.data.otherTalent || "",
+      talent: sub.data.talent || "",
+      status: sub.data.status || "Pending"
+    }));
+
+    return { statusCode: 200, body: JSON.stringify(submissions) };
 
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
-};
+}
