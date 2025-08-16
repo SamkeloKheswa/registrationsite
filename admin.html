@@ -76,6 +76,7 @@ th {
   border: none;
   border-radius: 4px;
   color: white;
+  cursor: pointer;
 }
 
 .approve { background: #28a745; }
@@ -118,6 +119,7 @@ th {
 </div>
 
 <script>
+// === Admin Login ===
 const adminUsername = "admin";
 const adminPassword = "password123";
 let submissions = [];
@@ -133,12 +135,18 @@ function login(){
   }
 }
 
+// === Fetch submissions from Netlify form "talent-show" ===
 async function fetchSubmissions(){
-  const res = await fetch('/.netlify/functions/get-submissions');
-  submissions = await res.json();
-  loadTable();
+  try {
+    const res = await fetch('/.netlify/functions/get-talent-submissions');
+    submissions = await res.json();
+    loadTable();
+  } catch(err){
+    alert("Error fetching submissions: " + err.message);
+  }
 }
 
+// === Load table ===
 function loadTable(){
   const tbody = document.querySelector("#submissionTable tbody");
   tbody.innerHTML = "";
@@ -150,8 +158,8 @@ function loadTable(){
         <td>${s.phone}</td>
         <td>${s.category}</td>
         <td>${s.talentCategory}</td>
-        <td>${s.otherTalent}</td>
-        <td>${s.talent}</td>
+        <td>${s.otherTalent || ''}</td>
+        <td>${s.talent || ''}</td>
         <td>${s.status || 'Pending'}</td>
         <td>
           <button class="action-btn approve" onclick="updateStatus(${i},'Approved')">Approve</button>
@@ -162,22 +170,25 @@ function loadTable(){
   });
 }
 
+// === Update status ===
 function updateStatus(index, status){
   submissions[index].status = status;
   loadTable();
 }
 
+// === Download CSV ===
 function downloadCSV(){
   let csv = "Full Name,Email,Phone,Category,Talent Category,Other Talent,Talent Description,Status\n";
   submissions.forEach(s=>{
-    csv += `${s.fullname},${s.email},${s.phone},${s.category},${s.talentCategory},${s.otherTalent},${s.talent},${s.status || 'Pending'}\n`;
+    csv += `"${s.fullname}","${s.email}","${s.phone}","${s.category}","${s.talentCategory}","${s.otherTalent || ''}","${s.talent || ''}","${s.status || 'Pending'}"\n`;
   });
   const blob = new Blob([csv], { type: 'text/csv' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'submissions.csv';
+  link.download = 'talent-show-submissions.csv';
   link.click();
 }
 </script>
+
 </body>
 </html>
