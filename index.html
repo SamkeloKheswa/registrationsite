@@ -3,191 +3,254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hammarsdale Got Talent - Admin</title>
+<title>Hammarsdale Got Talent Registration</title>
 <style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f9f9f9;
-  margin: 0;
-}
+  /* Body & Background */
+  body {
+    background:
+      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+      url('new.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 30px;
-  background: white;
-}
+  /* Header */
+  header {
+    text-align: center;
+    padding: 40px 20px 10px 20px;
+  }
 
-header img {
-  height: 60px;
-}
+  header h1 {
+    color: #ffcc66;
+    font-family: 'Georgia', serif;
+    font-size: 2.8em;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    margin: 0;
+  }
 
-#loginContainer, #dashboardContainer {
-  max-width: 900px;
-  margin: 50px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
+  header p {
+    color: #fff;
+    font-size: 1.1em;
+    margin-top: 10px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+  }
 
-h2 { text-align: center; color: #ff6600; }
+  /* Form container */
+  form {
+    max-width: 550px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.97);
+    padding: 30px 35px;
+    border-radius: 15px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    border-top: 6px solid #ff6600;
+  }
 
-label { font-weight: bold; }
+  label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: 'Verdana', sans-serif;
+    color: #333;
+  }
 
-input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
+  input, select, textarea {
+    width: 100%;
+    padding: 14px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 1em;
+    transition: all 0.3s ease;
+  }
 
-button {
-  background: #ff6600;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  margin-top: 20px;
-  cursor: pointer;
-}
+  input:focus, select:focus, textarea:focus {
+    border-color: #ff6600;
+    box-shadow: 0 0 10px rgba(255,102,0,0.4);
+    outline: none;
+  }
 
-button:hover { background: #e65c00; }
+  button {
+    background: #ff6600;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 25px;
+    padding: 14px;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
+  button:hover {
+    background: #e65c00;
+    box-shadow: 0 6px 15px rgba(230,92,0,0.4);
+  }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-}
+  #talentDiv, #talentCatDiv {
+    background: #fff8f0;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 12px;
+    border: 1px solid #ffcc99;
+  }
 
-th {
-  background: #ff6600;
-  color: white;
-}
+  /* Events Panel */
+  .events {
+    background: rgba(0,0,0,0.7);
+    color: white;
+    margin: 40px auto;
+    padding: 25px;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    text-align: center;
+  }
+  .events h2 {
+    color: #ffcc66;
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+  .events p {
+    color: #ddd;
+    font-size: 1.2em;
+    line-height: 1.5;
+  }
 
-.action-btn {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-}
+  /* Footer */
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 60px;
+    padding: 20px;
+    background: rgba(0,0,0,0.8);
+  }
 
-.approve { background: #28a745; }
-.reject { background: #dc3545; }
-.download-btn { background: #007bff; }
+  footer img {
+    height: 80px;
+    opacity: 0.95;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
 
-.hidden { display: none; }
+  footer .center-img {
+    flex-grow: 1;
+    text-align: center;
+  }
+  footer .center-img img {
+    width: 200px;
+  }
+
+  @media (max-width: 600px) {
+    form {
+      margin: 30px 20px;
+      padding: 25px 20px;
+    }
+    header h1 {
+      font-size: 2.2em;
+    }
+    footer {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.jpeg" alt="Logo Left">
-  <img src="logov.jpeg" alt="Logo Right">
+  <h1>Hammarsdale Got Talent</h1>
+  <p>Register now to showcase your talent or volunteer for the event!</p>
 </header>
 
-<div id="loginContainer">
-  <h2>Admin Login</h2>
-  <label>Username</label>
-  <input type="text" id="username">
-  <label>Password</label>
-  <input type="password" id="password">
-  <button onclick="login()">Login</button>
-  <p id="loginError" style="color:red;"></p>
-</div>
+<form name="talent-registration" method="POST" data-netlify="true">
+  <input type="hidden" name="form-name" value="talent-registration">
 
-<div id="dashboardContainer" class="hidden">
-  <h2>Admin Dashboard</h2>
-  <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
-  <table id="submissionTable">
-    <thead>
-      <tr>
-        <th>Full Name</th><th>Email</th><th>Phone</th><th>Category</th>
-        <th>Talent Category</th><th>Other Talent</th><th>Description</th>
-        <th>Status</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+  <label for="fullname">Full Name</label>
+  <input type="text" id="fullname" name="fullname" required>
+
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="phone">Phone Number</label>
+  <input type="tel" id="phone" name="phone" required placeholder="e.g., 0812345678">
+
+  <label for="category">Category</label>
+  <select id="category" name="category" required>
+    <option value="">--Select--</option>
+    <option value="Performer">Performer</option>
+    <option value="Volunteer">Volunteer</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <div id="talentCatDiv" style="display:none;">
+    <label for="talentCategory">Talent Category</label>
+    <select id="talentCategory" name="talentCategory">
+      <option value="">--Select Talent--</option>
+      <option value="Singing">Singing</option>
+      <option value="Dancing">Dancing</option>
+      <option value="Acting">Acting</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div id="talentDiv" style="display:none;">
+    <label for="talent">Talent Description</label>
+    <textarea id="talent" name="talent" placeholder="Describe your talent"></textarea>
+  </div>
+
+  <button type="submit">Submit Registration</button>
+</form>
+
+<!-- Events Panel -->
+<section class="events">
+  <h2>Upcoming Event</h2>
+  <p>🎤 <strong>Hammarsdale Got Talent Show</strong><br>
+     📅 Date: 27 & 28 September 2025<br>
+     🕒 Time: To Be Confirmed<br>
+     📍 Venue: To Be Confirmed<br><br>
+     Get ready to showcase your talent and join the excitement! Stay tuned for more updates.</p>
+</section>
+
+<!-- Footer with Logos -->
+<footer>
+  <img src="logo.jpeg" alt="Left Logo">
+  <div class="center-img">
+    <img src="talent2.jpg" alt="Hammarsdale Talent Show">
+  </div>
+  <img src="logov.jpeg" alt="Right Logo">
+</footer>
 
 <script>
-// === Admin Login ===
-const adminUsername = "admin";
-const adminPassword = "password123";
-let submissions = [];
+const category = document.getElementById('category');
+const talentDiv = document.getElementById('talentDiv');
+const talentField = document.getElementById('talent');
+const talentCatDiv = document.getElementById('talentCatDiv');
+const talentCategory = document.getElementById('talentCategory');
 
-function login(){
-  if(document.getElementById('username').value === adminUsername &&
-     document.getElementById('password').value === adminPassword){
-    document.getElementById('loginContainer').classList.add('hidden');
-    document.getElementById('dashboardContainer').classList.remove('hidden');
-    fetchSubmissions();
+category.addEventListener('change', function() {
+  if (this.value === 'Performer' || this.value === 'Other') {
+    talentDiv.style.display = 'block';
+    talentField.required = true;
+    talentCatDiv.style.display = 'block';
+    talentCategory.required = true;
   } else {
-    document.getElementById('loginError').textContent = "Invalid credentials";
+    talentDiv.style.display = 'none';
+    talentField.required = false;
+    talentField.value = '';
+    talentCatDiv.style.display = 'none';
+    talentCategory.required = false;
+    talentCategory.value = '';
   }
-}
-
-// === Fetch submissions from Netlify form "talent-show" ===
-async function fetchSubmissions(){
-  try {
-    const res = await fetch('/.netlify/functions/get-talent-submissions');
-    submissions = await res.json();
-    loadTable();
-  } catch(err){
-    alert("Error fetching submissions: " + err.message);
-  }
-}
-
-// === Load table ===
-function loadTable(){
-  const tbody = document.querySelector("#submissionTable tbody");
-  tbody.innerHTML = "";
-  submissions.forEach((s,i)=>{
-    tbody.innerHTML += `
-      <tr>
-        <td>${s.fullname}</td>
-        <td>${s.email}</td>
-        <td>${s.phone}</td>
-        <td>${s.category}</td>
-        <td>${s.talentCategory}</td>
-        <td>${s.otherTalent || ''}</td>
-        <td>${s.talent || ''}</td>
-        <td>${s.status || 'Pending'}</td>
-        <td>
-          <button class="action-btn approve" onclick="updateStatus(${i},'Approved')">Approve</button>
-          <button class="action-btn reject" onclick="updateStatus(${i},'Rejected')">Reject</button>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-// === Update status ===
-function updateStatus(index, status){
-  submissions[index].status = status;
-  loadTable();
-}
-
-// === Download CSV ===
-function downloadCSV(){
-  let csv = "Full Name,Email,Phone,Category,Talent Category,Other Talent,Talent Description,Status\n";
-  submissions.forEach(s=>{
-    csv += `"${s.fullname}","${s.email}","${s.phone}","${s.category}","${s.talentCategory}","${s.otherTalent || ''}","${s.talent || ''}","${s.status || 'Pending'}"\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'talent-show-submissions.csv';
-  link.click();
-}
+});
 </script>
 
 </body>
