@@ -5,85 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hammarsdale Got Talent - Admin</title>
 <style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f9f9f9;
-  margin: 0;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 30px;
-  background: white;
-}
-
-header img {
-  height: 60px;
-}
-
-#loginContainer, #dashboardContainer {
-  max-width: 900px;
-  margin: 50px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
+body { font-family: 'Segoe UI', sans-serif; background: #f9f9f9; margin: 0; }
+header { display: flex; justify-content: space-between; padding: 10px 30px; background: white; }
+header img { height: 60px; }
+#loginContainer, #dashboardContainer { max-width: 900px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
 h2 { text-align: center; color: #ff6600; }
-
 label { font-weight: bold; }
-
-input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-button {
-  background: #ff6600;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  margin-top: 20px;
-  cursor: pointer;
-}
-
+input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+button { background: #ff6600; color: white; padding: 12px; border: none; border-radius: 6px; margin-top: 20px; cursor: pointer; }
 button:hover { background: #e65c00; }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-}
-
-th {
-  background: #ff6600;
-  color: white;
-}
-
-.action-btn {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-}
-
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #ff6600; color: white; }
+.action-btn { padding: 5px 10px; border: none; border-radius: 4px; color: white; cursor: pointer; }
 .approve { background: #28a745; }
 .reject { background: #dc3545; }
-.download-btn { background: #007bff; }
-
+.download-btn { background: #007bff; margin-bottom: 10px; }
 .hidden { display: none; }
+tr.approved { background: #d4edda; }
+tr.rejected { background: #f8d7da; }
 </style>
 </head>
 <body>
@@ -106,6 +46,7 @@ th {
 <div id="dashboardContainer" class="hidden">
   <h2>Admin Dashboard</h2>
   <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
+  <button onclick="logout()">Logout</button>
   <table id="submissionTable">
     <thead>
       <tr>
@@ -124,6 +65,10 @@ const adminUsername = "admin";
 const adminPassword = "password123";
 let submissions = [];
 
+// Load from localStorage if exists
+const savedSubmissions = localStorage.getItem('submissions');
+if (savedSubmissions) submissions = JSON.parse(savedSubmissions);
+
 function login(){
   if(document.getElementById('username').value === adminUsername &&
      document.getElementById('password').value === adminPassword){
@@ -135,11 +80,25 @@ function login(){
   }
 }
 
-// === Fetch submissions from Netlify form "talent-show" ===
+function logout(){
+  document.getElementById('dashboardContainer').classList.add('hidden');
+  document.getElementById('loginContainer').classList.remove('hidden');
+}
+
+// === Fetch submissions from Netlify function ===
 async function fetchSubmissions(){
   try {
     const res = await fetch('/.netlify/functions/get-talent-submissions');
-    submissions = await res.json();
+    if (!res.ok) throw new Error("Failed to fetch submissions");
+    const data = await res.json();
+
+    // Merge fetched submissions with localStorage statuses
+    submissions = data.map(f => {
+      const local = submissions.find(s => s.email === f.email);
+      return local ? {...f, status: local.status} : f;
+    });
+
+    localStorage.setItem('submissions', JSON.stringify(submissions));
     loadTable();
   } catch(err){
     alert("Error fetching submissions: " + err.message);
@@ -152,7 +111,7 @@ function loadTable(){
   tbody.innerHTML = "";
   submissions.forEach((s,i)=>{
     tbody.innerHTML += `
-      <tr>
+      <tr class="${s.status === 'Approved' ? 'approved' : s.status === 'Rejected' ? 'rejected' : ''}">
         <td>${s.fullname}</td>
         <td>${s.email}</td>
         <td>${s.phone}</td>
@@ -160,7 +119,7 @@ function loadTable(){
         <td>${s.talentCategory}</td>
         <td>${s.otherTalent || ''}</td>
         <td>${s.talent || ''}</td>
-        <td>${s.status || 'Pending'}</td>
+        <td>${s.status}</td>
         <td>
           <button class="action-btn approve" onclick="updateStatus(${i},'Approved')">Approve</button>
           <button class="action-btn reject" onclick="updateStatus(${i},'Rejected')">Reject</button>
@@ -173,14 +132,16 @@ function loadTable(){
 // === Update status ===
 function updateStatus(index, status){
   submissions[index].status = status;
+  localStorage.setItem('submissions', JSON.stringify(submissions));
   loadTable();
 }
 
 // === Download CSV ===
 function downloadCSV(){
+  const escapeCSV = str => str.replace(/"/g,'""');
   let csv = "Full Name,Email,Phone,Category,Talent Category,Other Talent,Talent Description,Status\n";
   submissions.forEach(s=>{
-    csv += `"${s.fullname}","${s.email}","${s.phone}","${s.category}","${s.talentCategory}","${s.otherTalent || ''}","${s.talent || ''}","${s.status || 'Pending'}"\n`;
+    csv += `"${escapeCSV(s.fullname)}","${escapeCSV(s.email)}","${escapeCSV(s.phone)}","${escapeCSV(s.category)}","${escapeCSV(s.talentCategory)}","${escapeCSV(s.otherTalent || '')}","${escapeCSV(s.talent || '')}","${escapeCSV(s.status)}"\n`;
   });
   const blob = new Blob([csv], { type: 'text/csv' });
   const link = document.createElement('a');
