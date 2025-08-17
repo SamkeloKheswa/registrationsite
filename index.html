@@ -1,154 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hammarsdale Got Talent Show Registration</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: url('new.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-    }
-    .overlay {
-      background: rgba(0, 0, 0, 0.6);
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #ffcc00;
-    }
-    form {
-      display: grid;
-      gap: 15px;
-    }
-    label {
-      font-weight: bold;
-    }
-    input, select, textarea, button {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      width: 100%;
-    }
-    button {
-      background-color: #ffcc00;
-      color: #000;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #e6b800;
-    }
-    .footer {
-      margin-top: 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer img {
-      height: 60px;
-    }
-    /* Events Section */
-    .events {
-      margin-top: 40px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-    }
-    .event-card {
-      background: rgba(0, 0, 0, 0.5);
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 8px;
-    }
-    .event-card h3 {
-      margin: 0 0 10px;
-      color: #ffcc00;
-    }
-    .event-card p {
-      margin: 0;
-    }
-    /* Mobile */
-    @media (max-width: 600px) {
-      .footer img {
-        height: 40px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hammarsdale Got Talent - Admin</title>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+  background: white;
+}
+
+header img {
+  height: 60px;
+}
+
+#loginContainer, #dashboardContainer {
+  max-width: 900px;
+  margin: 50px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+h2 { text-align: center; color: #ff6600; }
+
+label { font-weight: bold; }
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  background: #ff6600;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+button:hover { background: #e65c00; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+th {
+  background: #ff6600;
+  color: white;
+}
+
+.action-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.approve { background: #28a745; }
+.reject { background: #dc3545; }
+.download-btn { background: #007bff; }
+
+.hidden { display: none; }
+</style>
 </head>
 <body>
-  <div class="overlay">
-    <div class="container">
-      <h1>Hammarsdale Got Talent Show Registration</h1>
-      
-      <form name="talent-show" method="POST" data-netlify="true">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+<header>
+  <img src="logo.jpeg" alt="Logo Left">
+  <img src="logov.jpeg" alt="Logo Right">
+</header>
 
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="phone" required>
+<div id="loginContainer">
+  <h2>Admin Login</h2>
+  <label>Username</label>
+  <input type="text" id="username">
+  <label>Password</label>
+  <input type="password" id="password">
+  <button onclick="login()">Login</button>
+  <p id="loginError" style="color:red;"></p>
+</div>
 
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="Performer">Performer</option>
-          <option value="Volunteer">Volunteer</option>
-          <option value="Other">Other</option>
-        </select>
+<div id="dashboardContainer" class="hidden">
+  <h2>Admin Dashboard</h2>
+  <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
+  <table id="submissionTable">
+    <thead>
+      <tr>
+        <th>Full Name</th><th>Email</th><th>Phone</th><th>Category</th>
+        <th>Talent Category</th><th>Other Talent</th><th>Description</th>
+        <th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-        <label for="talent">Talent Description</label>
-        <textarea id="talent" name="talent"></textarea>
+<script>
+// === Admin Login ===
+const adminUsername = "admin";
+const adminPassword = "password123";
+let submissions = [];
 
-        <label for="talentCategory">Talent Category</label>
-        <select id="talentCategory" name="talentCategory">
-          <option value="Music">Music</option>
-          <option value="Dance">Dance</option>
-          <option value="Comedy">Comedy</option>
-          <option value="Drama">Drama</option>
-          <option value="Other">Other</option>
-        </select>
+function login(){
+  if(document.getElementById('username').value === adminUsername &&
+     document.getElementById('password').value === adminPassword){
+    document.getElementById('loginContainer').classList.add('hidden');
+    document.getElementById('dashboardContainer').classList.remove('hidden');
+    fetchSubmissions();
+  } else {
+    document.getElementById('loginError').textContent = "Invalid credentials";
+  }
+}
 
-        <button type="submit">Submit</button>
-      </form>
+// === Fetch submissions from Netlify form "talent-show" ===
+async function fetchSubmissions(){
+  try {
+    const res = await fetch('/.netlify/functions/get-talent-submissions');
+    submissions = await res.json();
+    loadTable();
+  } catch(err){
+    alert("Error fetching submissions: " + err.message);
+  }
+}
 
-     <!-- Events Section -->
-<div class="events">
-  <h2>Upcoming Events</h2>
-  
-  <div class="event-card">
-    <h3>Talent Show Entries Date</h3>
-    <p><strong>Entries Open:</strong> 19 August 2025</p>
-    <p><strong>Entries Close:</strong> 17 September 2025</p>
-    <p class="highlight">Don’t miss your chance to register!</p>
-  </div>
-  
-  <div class="event-card">
-    <h3>Hammarsdale Got Talent Show</h3>
-    <p><strong>Date:</strong> 27 & 28 September 2025</p>
-    <p><strong>Location:</strong> Magaba Hall (Hammarsdale)</p>
-    <p><strong>Time:</strong> 09:00 - 17:00</p>
-    <p><strong>For More Info Contact:</strong> Themba - 0670226846</p>
-  </div>
-      <!-- Footer -->
-      <div class="footer">
-        <img src="logo.jpeg" alt="Logo Left">
-        <img src="logov.jpeg" alt="Logo Right">
-      </div>
-    </div>
-  </div>
+// === Load table ===
+function loadTable(){
+  const tbody = document.querySelector("#submissionTable tbody");
+  tbody.innerHTML = "";
+  submissions.forEach((s,i)=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${s.fullname}</td>
+        <td>${s.email}</td>
+        <td>${s.phone}</td>
+        <td>${s.category}</td>
+        <td>${s.talentCategory}</td>
+        <td>${s.otherTalent || ''}</td>
+        <td>${s.talent || ''}</td>
+        <td>${s.status || 'Pending'}</td>
+        <td>
+          <button class="action-btn approve" onclick="updateStatus(${i},'Approved')">Approve</button>
+          <button class="action-btn reject" onclick="updateStatus(${i},'Rejected')">Reject</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+// === Update status ===
+function updateStatus(index, status){
+  submissions[index].status = status;
+  loadTable();
+}
+
+// === Download CSV ===
+function downloadCSV(){
+  let csv = "Full Name,Email,Phone,Category,Talent Category,Other Talent,Talent Description,Status\n";
+  submissions.forEach(s=>{
+    csv += `"${s.fullname}","${s.email}","${s.phone}","${s.category}","${s.talentCategory}","${s.otherTalent || ''}","${s.talent || ''}","${s.status || 'Pending'}"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'talent-show-submissions.csv';
+  link.click();
+}
+</script>
+
 </body>
 </html>
