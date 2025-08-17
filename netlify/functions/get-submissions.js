@@ -1,11 +1,11 @@
-// functions/get-talent-submissions.js
-import fetch from "node-fetch";
+// netlify/functions/get-talent-submissions.js
 
 export async function handler() {
-  const formId = "talent-show"; // updated form ID
-  const token = "nfp_uM5awoizEeFMXoR3kd1ReTrdS3Zgt5XZ7527"; // Personal token
+  const formId = "talent-show"; // Your Netlify form name
+  const token = process.env.NETLIFY_AUTH_TOKEN; // Store your personal token in Netlify env vars
 
   try {
+    // Use native fetch (Node 18+)
     const res = await fetch(`https://api.netlify.com/api/v1/forms/${formId}/submissions`, {
       headers: { "Authorization": `Bearer ${token}` }
     });
@@ -16,6 +16,7 @@ export async function handler() {
 
     const data = await res.json();
 
+    // Map the form submissions to a simpler format
     const submissions = data.map(sub => ({
       fullname: sub.data.fullname || "",
       email: sub.data.email || "",
