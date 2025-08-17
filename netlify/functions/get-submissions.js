@@ -1,36 +1,47 @@
-// netlify/functions/get-talent-submissions.js
+import fetch from 'node-fetch';
 
 export async function handler() {
-  const formId = "talent-show"; // Your Netlify form name
-  const token = process.env.NETLIFY_AUTH_TOKEN; // Store your personal token in Netlify env vars
+  const PROJECT_ID = '9c904389-224f-4546-b948-594ecd41499d';
+  const PERSONAL_TOKEN = 'nfp_uM5awoizEeFMXoR3kd1ReTrdS3Zgt5XZ7527';
+  const FORM_NAME = 'talent-show';
 
   try {
-    // Use native fetch (Node 18+)
-    const res = await fetch(`https://api.netlify.com/api/v1/forms/${formId}/submissions`, {
-      headers: { "Authorization": `Bearer ${token}` }
+    const res = await fetch(`https://api.netlify.com/api/v1/forms/${FORM_NAME}/submissions`, {
+      headers: {
+        Authorization: `Bearer ${PERSONAL_TOKEN}`
+      }
     });
 
     if (!res.ok) {
-      return { statusCode: res.status, body: JSON.stringify({ error: "Failed to fetch submissions" }) };
+      return {
+        statusCode: res.status,
+        body: JSON.stringify({ error: 'Failed to fetch submissions' })
+      };
     }
 
     const data = await res.json();
 
-    // Map the form submissions to a simpler format
-    const submissions = data.map(sub => ({
-      fullname: sub.data.fullname || "",
-      email: sub.data.email || "",
-      phone: sub.data.phone || "",
-      category: sub.data.category || "",
-      talentCategory: sub.data.talentCategory || "",
-      otherTalent: sub.data.otherTalent || "",
-      talent: sub.data.talent || "",
-      status: sub.data.status || "Pending"
+    // Map submissions to only required fields
+    const submissions = data.map(s => ({
+      fullname: s.data.fullname || '',
+      email: s.data.email || '',
+      phone: s.data.phone || '',
+      category: s.data.category || '',
+      talentCategory: s.data.talentCategory || '',
+      otherTalent: s.data.otherTalent || '',
+      talent: s.data.talent || '',
+      status: s.data.status || 'Pending'
     }));
 
-    return { statusCode: 200, body: JSON.stringify(submissions) };
+    return {
+      statusCode: 200,
+      body: JSON.stringify(submissions)
+    };
 
-  } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message })
+    };
   }
 }
