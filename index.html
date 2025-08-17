@@ -120,8 +120,7 @@
   }
   .events p {
     color: #ddd;
-    font-size: 1.2em;
-    line-height: 1.5;
+    font-size: 1.1em;
   }
 
   /* Footer */
@@ -213,11 +212,11 @@
 <!-- Events Panel -->
 <section class="events">
   <h2>Upcoming Event</h2>
-  <p>🎤 <strong>Hammarsdale Got Talent Show</strong><br>
-     📅 Date: 27 & 28 September 2025<br>
-     🕒 Time: To Be Confirmed<br>
-     📍 Venue: To Be Confirmed<br><br>
-     Get ready to showcase your talent and join the excitement! Stay tuned for more updates.</p>
+  <p>🎤 <strong>Hammarsdale Got Talent Show</strong></p>
+  <p>📅 Date: 27 & 28 September 2025</p>
+  <p>⏰ Time: TBC</p>
+  <p>📍 Venue: TBC</p>
+  <p>🌟 Don’t miss this exciting showcase of talent! Stay tuned for updates.</p>
 </section>
 
 <!-- Footer with Logos -->
@@ -250,6 +249,24 @@ category.addEventListener('change', function() {
     talentCategory.required = false;
     talentCategory.value = '';
   }
+});
+
+// CSV Download for Admin
+const form = document.querySelector('form');
+form.addEventListener('submit', function(e) {
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => { data[key] = value; });
+
+  const csvHeader = Object.keys(data).join(',') + '\n';
+  const csvRow = Object.values(data).join(',') + '\n';
+  const csvContent = csvHeader + csvRow;
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'talent_submission.csv';
+  link.click();
 });
 </script>
 
