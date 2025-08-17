@@ -1,28 +1,36 @@
+// netlify/functions/get-submissions.js
 import fetch from 'node-fetch';
 
 export async function handler() {
-  const PROJECT_ID = '9c904389-224f-4546-b948-594ecd41499d';
-  const PERSONAL_TOKEN = 'nfp_uM5awoizEeFMXoR3kd1ReTrdS3Zgt5XZ7527';
-  const FORM_NAME = 'talent-show';
-
   try {
-    const res = await fetch(`https://api.netlify.com/api/v1/forms/${FORM_NAME}/submissions`, {
-      headers: {
-        Authorization: `Bearer ${PERSONAL_TOKEN}`
-      }
-    });
+    const siteId = '9c904389-224f-4546-b948-594ecd41499d'; // Your Netlify Site ID
+    const formId = 'talent-show'; // Your form name in Netlify
+    const token = process.env.NETLIFY_API_TOKEN; // Pull token from environment variables
 
-    if (!res.ok) {
+    if (!token) {
       return {
-        statusCode: res.status,
-        body: JSON.stringify({ error: 'Failed to fetch submissions' })
+        statusCode: 500,
+        body: JSON.stringify({ error: 'API token not found in environment variables' }),
       };
     }
 
-    const data = await res.json();
+    const response = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms/${formId}/submissions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    // Map submissions to only required fields
-    const submissions = data.map(s => ({
+    if (!response.ok) {
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ error: 'Failed to fetch submissions' }),
+      };
+    }
+
+    const submissions = await response.json();
+
+    // Map to your dashboard fields if needed
+    const data = submissions.map((s) => ({
       fullname: s.data.fullname || '',
       email: s.data.email || '',
       phone: s.data.phone || '',
@@ -30,18 +38,17 @@ export async function handler() {
       talentCategory: s.data.talentCategory || '',
       otherTalent: s.data.otherTalent || '',
       talent: s.data.talent || '',
-      status: s.data.status || 'Pending'
+      status: s.data.status || 'Pending',
     }));
 
     return {
       statusCode: 200,
-      body: JSON.stringify(submissions)
+      body: JSON.stringify(data),
     };
-
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      body: JSON.stringify({ error: error.message }),
     };
   }
 }
