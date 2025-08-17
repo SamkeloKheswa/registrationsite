@@ -1,0 +1,12 @@
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "description": "Netlify functions project",
+  "main": "index.js",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC"
+}
